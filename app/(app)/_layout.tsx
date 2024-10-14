@@ -19,5 +19,16 @@ export default function AppLayout() {
   }
 
   // This layout can be deferred because it's not the root layout.
-  return <Stack />;
+  return (
+    <Stack
+      screenOptions={{
+        title: "Investimentos",
+        statusBarStyle: "dark",
+        contentStyle: {
+          paddingTop: 24,
+          paddingHorizontal: 16,
+        },
+      }}
+    />
+  );
 }

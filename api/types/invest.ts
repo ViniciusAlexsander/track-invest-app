@@ -1,4 +1,4 @@
-export interface IAssets {
+export interface IInvest {
   id: number;
   code: string;
   name: string;

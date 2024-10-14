@@ -1,12 +1,11 @@
-import { IAssets } from "./types/assets";
+import { IInvest } from "./types/invest";
+import { axiosClient } from "@/shared/configs/axios";
 
-export const fetchFindManyAssets = async (): Promise<IAssets[]> => {
+export const fetchFindManyInvest = async (): Promise<IInvest[]> => {
   try {
-    const response = await fetch(
-      `https://track-invest-production.up.railway.app/invest`
-    );
-    const data = await response.json();
-    return data;
+    const response = await axiosClient.get("/invest");
+
+    return response.data;
   } catch (error) {
     throw error;
   }

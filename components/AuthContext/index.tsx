@@ -1,13 +1,20 @@
+import { login } from "@/api/auth";
+import { ILoginRequest } from "@/api/types/auth";
 import { useStorageState } from "@/hooks/useStorageState";
+import { axiosClient } from "@/shared/configs/axios";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { router } from "expo-router";
 import { createContext, useContext, type PropsWithChildren } from "react";
 
 const AuthContext = createContext<{
-  signIn: () => void;
+  signIn: (body: ILoginRequest) => Promise<void>;
   signOut: () => void;
   session?: string | null;
   isLoading: boolean;
 }>({
-  signIn: () => null,
+  signIn: async (body: ILoginRequest) => {
+    return Promise.resolve();
+  },
   signOut: () => null,
   session: null,
   isLoading: false,
@@ -31,9 +38,15 @@ export function SessionProvider({ children }: PropsWithChildren) {
   return (
     <AuthContext.Provider
       value={{
-        signIn: () => {
-          // Perform sign-in logic here
-          setSession("xxx");
+        signIn: async (body: ILoginRequest) => {
+          try {
+            const response = await login(body);
+            setSession(response.access_token);
+            const jsonValue = JSON.stringify(response.access_token);
+            await AsyncStorage.setItem("authToken", jsonValue);
+
+            router.replace("/");
+          } catch (error) {}
         },
         signOut: () => {
           setSession(null);
